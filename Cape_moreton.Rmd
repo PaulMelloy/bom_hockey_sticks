@@ -16,9 +16,9 @@ library(ggplot2)
 approx_cape_moreton_latlon <- c(-27.0314, 153.454)
 
 # find stations near the latitude and longitude above
-stations <- sweep_for_stations(latlon = c(-27.0314, 153.454))
+stations <- sweep_for_stations(latlon = approx_cape_moreton_latlon)
 
-stations[1:10,]
+stations[1:10, ]
 ```
 
 ## Cape Moreton Lighthouse
@@ -51,7 +51,8 @@ min(C_moreton_min$year)
 
 Plot boxplots of temperature minimums over the 111 years of observation
 ```{r min_boxplot, fig.height=8, fig.width=5, warning=FALSE}
-C_moreton_min %>%
+C_moreton_min_plot <-
+   C_moreton_min %>%
    filter(year != 2021) %>% # remove 2021 due to incomplete yearly data
    ggplot(aes(x = factor(year), y = min_temperature)) +
    geom_boxplot() +
@@ -69,6 +70,17 @@ C_moreton_min %>%
          by = 5
       )
    )
+C_moreton_min_plot
+```
+
+```{r saveMinPlot}
+ggsave(
+   plot = C_moreton_min_plot,
+   filename = "plots/Cape_Moreton_MinTm.png",
+   device = "png",
+   width = 5,
+   height = 8
+)
 ```
 
 
