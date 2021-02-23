@@ -18,8 +18,11 @@ approx_cape_moreton_latlon <- c(-27.0314, 153.454)
 # find stations near the latitude and longitude above
 stations <- sweep_for_stations(latlon = c(-27.0314, 153.454))
 
-head(stations)
+stations[1:10,]
 ```
+
+## Cape Moreton Lighthouse
+Cape Moreton lighthouse is a great location to observe local climate change in maximum and minimum temperatures. This is because the records go back over 110 years and temperature extremes are buffered by the ocean temperatures.  
 
 ```{r get_Cape_Moreton_data, message=FALSE, warning=FALSE}
 C_moreton_min <-
@@ -94,4 +97,6 @@ C_moreton_max %>%
 
 __NOTE: Early measurements such as between 1910 - 1916 were likely warmer due to measurements taken from non shaded thermometers__
 (BOM early data)[http://www.bom.gov.au/climate/data/acorn-sat/#tabs=Early-data]
+
+
 
