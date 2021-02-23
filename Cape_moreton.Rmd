@@ -5,7 +5,7 @@ date: "23/02/2021"
 output: html_document
 ---
 
-```{r libraries}
+```{r libraries, message=FALSE, warning=FALSE}
 #install.packages("bomrang")
 library(bomrang)
 library(dplyr)
@@ -15,18 +15,18 @@ library(ggplot2)
 ```{r find_station}
 approx_cape_moreton_latlon <- c(-27.0314, 153.454)
 
-# find stations near the latitude and logitude above
+# find stations near the latitude and longitude above
 stations <- sweep_for_stations(latlon = c(-27.0314, 153.454))
 
 head(stations)
 ```
 
-```{r get_Cape_Moreton_data}
+```{r get_Cape_Moreton_data, message=FALSE, warning=FALSE}
 C_moreton_min <-
-   get_historical(latlon = unlist(stations[1, c("lat", "lon")]),type = c("min"))
+   get_historical(latlon = unlist(stations[1, c("lat", "lon")]), type = c("min"))
 
 C_moreton_max <-
-   get_historical(latlon = unlist(stations[1, c("lat", "lon")]),type = c("max"))
+   get_historical(latlon = unlist(stations[1, c("lat", "lon")]), type = c("max"))
 
 head(C_moreton_min)
 ```
@@ -47,37 +47,49 @@ min(C_moreton_min$year)
 ```
 
 Plot boxplots of temperature minimums over the 111 years of observation
-```{r min_boxplot, fig.width= 4, fig.height=10}
+```{r min_boxplot, fig.height=8, fig.width=5, warning=FALSE}
 C_moreton_min %>%
-   filter(year != 2021)%>% # remove 2021 due to incomplete yearly data
-   ggplot(aes(x = factor(year), y = min_temperature))+
-   geom_boxplot()+
-   geom_hline(yintercept = median(C_moreton_min$min_temperature, na.rm = TRUE))+
+   filter(year != 2021) %>% # remove 2021 due to incomplete yearly data
+   ggplot(aes(x = factor(year), y = min_temperature)) +
+   geom_boxplot() +
+   geom_hline(yintercept = median(C_moreton_min$min_temperature, na.rm = TRUE)) +
    coord_flip() +
-     scale_x_discrete(breaks = seq(from = min(C_moreton_min$year),
-                                 to = max(C_moreton_min$year),
-                                 by = 5),
-                    labels = seq(from = min(C_moreton_min$year),
-                                 to = max(C_moreton_min$year),
-                                 by = 5))
+   scale_x_discrete(
+      breaks = seq(
+         from = min(C_moreton_min$year),
+         to = max(C_moreton_min$year),
+         by = 5
+      ),
+      labels = seq(
+         from = min(C_moreton_min$year),
+         to = max(C_moreton_min$year),
+         by = 5
+      )
+   )
 ```
 
 
 
 Plot boxplots of temperature maximums over the 111 years of observation
-```{r max_boxplot, fig.width= 4, fig.height=10}
+```{r max_boxplot, fig.height=8, fig.width=5, warning=FALSE}
 C_moreton_max %>%
-   filter(year != 2021)%>% # remove 2021 due to incomplete yearly data
-   ggplot(aes(x = factor(year), y = max_temperature))+
-   geom_boxplot()+
-   geom_hline(yintercept = median(C_moreton_max$max_temperature, na.rm = TRUE))+
-   coord_flip() + 
-   scale_x_discrete(breaks = seq(from = min(C_moreton_max$year),
-                                 to = max(C_moreton_max$year),
-                                 by = 5),
-                    labels = seq(from = min(C_moreton_max$year),
-                                 to = max(C_moreton_max$year),
-                                 by = 5))
+   filter(year != 2021) %>% # remove 2021 due to incomplete yearly data
+   ggplot(aes(x = factor(year), y = max_temperature)) +
+   geom_boxplot() +
+   geom_hline(yintercept = median(C_moreton_max$max_temperature, na.rm = TRUE)) +
+   coord_flip() +
+   scale_x_discrete(
+      breaks = seq(
+         from = min(C_moreton_max$year),
+         to = max(C_moreton_max$year),
+         by = 5
+      ),
+      labels = seq(
+         from = min(C_moreton_max$year),
+         to = max(C_moreton_max$year),
+         by = 5
+      )
+   )
 ```
 
 __NOTE: Early measurements such as between 1910 - 1916 were likely warmer due to measurements taken from non shaded thermometers__
