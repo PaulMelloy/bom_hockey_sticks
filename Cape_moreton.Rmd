@@ -53,7 +53,13 @@ C_moreton_min %>%
    ggplot(aes(x = factor(year), y = min_temperature))+
    geom_boxplot()+
    geom_hline(yintercept = median(C_moreton_min$min_temperature, na.rm = TRUE))+
-   coord_flip()
+   coord_flip() +
+     scale_x_discrete(breaks = seq(from = min(C_moreton_min$year),
+                                 to = max(C_moreton_min$year),
+                                 by = 5),
+                    labels = seq(from = min(C_moreton_min$year),
+                                 to = max(C_moreton_min$year),
+                                 by = 5))
 ```
 
 
@@ -65,7 +71,13 @@ C_moreton_max %>%
    ggplot(aes(x = factor(year), y = max_temperature))+
    geom_boxplot()+
    geom_hline(yintercept = median(C_moreton_max$max_temperature, na.rm = TRUE))+
-   coord_flip()
+   coord_flip() + 
+   scale_x_discrete(breaks = seq(from = min(C_moreton_max$year),
+                                 to = max(C_moreton_max$year),
+                                 by = 5),
+                    labels = seq(from = min(C_moreton_max$year),
+                                 to = max(C_moreton_max$year),
+                                 by = 5))
 ```
 
 __NOTE: Early measurements such as between 1910 - 1916 were likely warmer due to measurements taken from non shaded thermometers__
