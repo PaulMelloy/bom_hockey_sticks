@@ -1,0 +1,73 @@
+---
+title: "Cape_Moreton"
+author: "P. Melloy"
+date: "23/02/2021"
+output: html_document
+---
+
+```{r libraries}
+#install.packages("bomrang")
+library(bomrang)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r find_station}
+approx_cape_moreton_latlon <- c(-27.0314, 153.454)
+
+# find stations near the latitude and logitude above
+stations <- sweep_for_stations(latlon = c(-27.0314, 153.454))
+
+head(stations)
+```
+
+```{r get_Cape_Moreton_data}
+C_moreton_min <-
+   get_historical(latlon = unlist(stations[1, c("lat", "lon")]),type = c("min"))
+
+C_moreton_max <-
+   get_historical(latlon = unlist(stations[1, c("lat", "lon")]),type = c("max"))
+
+head(C_moreton_min)
+```
+
+Let's describe the data a little:  
+ - The earliest year for minimum temperature observations was `r min(C_moreton_min$year)`  
+ - The latest year for minimum temperature observations was `r max(C_moreton_min$year)`  
+ - missing years `r any(!(min(C_moreton_min$year):max(C_moreton_min$year) %in% unique(C_moreton_min$year)))`  
+ - The earliest year for minimum temperature observations was `r min(C_moreton_max$year)`  
+ - The latest year for minimum temperature observations was `r max(C_moreton_max$year)`  
+ - missing years `r any(!(min(C_moreton_max$year):max(C_moreton_max$year) %in% unique(C_moreton_max$year)))`  
+ -
+
+
+```{r data_summary}
+max(C_moreton_min$year) -
+min(C_moreton_min$year)
+```
+
+Plot boxplots of temperature minimums over the 111 years of observation
+```{r min_boxplot, fig.width= 4, fig.height=10}
+C_moreton_min %>%
+   filter(year != 2021)%>% # remove 2021 due to incomplete yearly data
+   ggplot(aes(x = factor(year), y = min_temperature))+
+   geom_boxplot()+
+   geom_hline(yintercept = median(C_moreton_min$min_temperature, na.rm = TRUE))+
+   coord_flip()
+```
+
+
+
+Plot boxplots of temperature maximums over the 111 years of observation
+```{r max_boxplot, fig.width= 4, fig.height=10}
+C_moreton_max %>%
+   filter(year != 2021)%>% # remove 2021 due to incomplete yearly data
+   ggplot(aes(x = factor(year), y = max_temperature))+
+   geom_boxplot()+
+   geom_hline(yintercept = median(C_moreton_max$max_temperature, na.rm = TRUE))+
+   coord_flip()
+```
+
+__NOTE: Early measurements such as between 1910 - 1916 were likely warmer due to measurements taken from non shaded thermometers__
+(BOM early data)[http://www.bom.gov.au/climate/data/acorn-sat/#tabs=Early-data]
+
